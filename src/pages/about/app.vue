@@ -1,9 +1,16 @@
 <template>
-  <h1>This is about page</h1>
+  <div>
+    <About></About>
+  </div>
 </template>
-<style lang="less">
+<style>
 </style>
 <script>
+import About from './About.vue'
+
 export default {
+  components: {
+    About
+  },
 }
 </script>
