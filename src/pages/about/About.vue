@@ -96,6 +96,65 @@
             </li>
           </ul>
         </div>
+        <div class="tab4" v-if="activeTab===3">
+          <ul class="table-head">
+            <li>职位</li>
+            <li>人数</li>
+            <li>学历要求</li>
+            <li>发布时间</li>
+          </ul>
+          <div class="tab4-comp">
+            <div class="tab4-comp-l" @click="clickBtn(0)">
+              <img src="./assets/icon_guanbi.png" alt="" v-if="activeComp===0">
+              <img src="./assets/icon_dakai.png" alt="" v-else>
+            </div>
+            <div class="tab4-comp-r">
+              <ul :class="['tab4-comp-r-header', {'comp-color': activeComp===0}]">
+                <li>专利工程师（合伙人）</li>
+                <li>若干人</li>
+                <li>专科以上学历</li>
+                <li>2019.6.15</li>
+              </ul>
+              <div class="tab4-comp-r-body" v-if="activeComp===0">
+                <div class="tab4-comp-r-body-inner">
+
+                  1、完成公司业绩目标要求的工作；
+                  2、挖掘业务需要的潜在客户并促成订单；
+                  3、在部门经理领导下，负责商标、专利、版权、科技项目案源开拓和知识产权市场营销；
+                  4、开发新客户，完成并跟进客户委托的案件，进行客户管理和档案管理；
+                  5、办理自己开发客户的商标、专利、版权、诉讼案件，并做好跟踪回访工作；
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="tab4-comp">
+            <div class="tab4-comp-l" @click="clickBtn(1)">
+              <img src="./assets/icon_guanbi.png" alt="" v-if="activeComp===1">
+              <img src="./assets/icon_dakai.png" alt="" v-else>
+            </div>
+            <div class="tab4-comp-r">
+              <ul :class="['tab4-comp-r-header', {'comp-color': activeComp===1}]">
+                <li>专利工程师（合伙人）</li>
+                <li>若干人</li>
+                <li>专科以上学历</li>
+                <li>2019.6.15</li>
+              </ul>
+              <div class="tab4-comp-r-body"  v-if="activeComp===1">
+                <div class="tab4-comp-r-body-inner">
+
+                  1、完成公司业绩目标要求的工作；
+                  2、挖掘业务需要的潜在客户并促成订单；
+                  3、在部门经理领导下，负责商标、专利、版权、科技项目案源开拓和知识产权市场营销；
+                  4、开发新客户，完成并跟进客户委托的案件，进行客户管理和档案管理；
+                  5、办理自己开发客户的商标、专利、版权、诉讼案件，并做好跟踪回访工作；
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
       </div>
     </div>
     <TopBtn></TopBtn>
@@ -119,7 +178,8 @@ export default {
         {img: require('./assets/banner2.png')},
       ],
       activeItem: 1,
-      activeTab: 0,
+      activeTab: 0, // 当前tab
+      activeComp: 0, // 诚聘英才 激活的id
       tabData: [
         {name: '公司简介', tabId: 0},
         {name: '公司文化', tabId: 1},
@@ -157,12 +217,17 @@ export default {
   methods: {
     clickTab (idx) {
       this.activeTab = idx
+    },
+    clickBtn (id) {
+      this.activeComp = id
     }
   },
   
   created () {},
 
-  mounted () {},
+  mounted () {
+
+  },
 
   beforeDestroy () {}
 }
@@ -291,5 +356,65 @@ export default {
     ::v-deep p {
       text-indent: 2em;
     }
+  }
+  .table-head {
+    display: flex;
+    font-size: 16px;
+    color: #666666;
+    padding-left: 41px;
+    li {
+      width: 25%;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+    }
+  }
+  .tab4-comp {
+    display: flex;
+    font-size: 16px;
+    color: #ffffff;
+    margin-bottom: 29px;
+  }
+  .tab4-comp-l {
+    width: 41px;
+    height: 50px;
+    @include defaultFlex;
+    img {
+      width: 26px;
+      height: 26px;
+    }
+  }
+  .tab4-comp-r {
+    width: 1160px;
+  }
+  .tab4-comp-r-header {
+    display: flex;
+    background-color: #A0A0A0;
+    li {
+      width: 25%;
+      height: 50px;
+      line-height: 50px;
+      text-align: center;
+    }
+  }
+  .tab4-comp-r-body {
+    border: 1px solid #BE2027;
+    font-size: 14px;
+    color: #131313;
+    padding: 49px 59px;
+  }
+  .tab4-comp-r-body-inner {
+    width: 100%;
+    height: 100%;
+
+    ::v-deep * {
+      color: #131313!important;
+      /*font-size: 14px!important;*/
+      font-family:MicrosoftYaHei;
+      line-height:32px;
+    }
+  }
+  .comp-color {
+    background-color: #BE2027!important;
   }
 </style>
