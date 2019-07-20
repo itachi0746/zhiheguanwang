@@ -5,9 +5,8 @@
     <div>
       <div class="tab-box">
         <div class="w1200">
-          <ul class="tab-ul">
-            <li :class="{'active': activeTab===index}" v-for="(item,index) in tabData" :key="index" @click="clickTab(index)">{{item.name}}</li>
-          </ul>
+          <TabComp v-if="tabData.length" :activeTab="activeTab" :tabData="tabData" @changeTab="changeTab"></TabComp>
+
         </div>
       </div>
 
@@ -169,6 +168,7 @@ import Header from '../../components/Header.vue'
 import Footer from '../../components/Footer.vue'
 import Lunbo from '../../components/Lunbo.vue'
 import TopBtn from '../../components/TopBtn.vue'
+import TabComp from '../../components/TabComp.vue'
 
 export default {
   data () {
@@ -209,7 +209,8 @@ export default {
     Header,
     Lunbo,
     Footer,
-    TopBtn
+    TopBtn,
+    TabComp
   },
 
   computed: {},
@@ -220,6 +221,9 @@ export default {
     },
     clickBtn (id) {
       this.activeComp = id
+    },
+    changeTab (idx) {
+      this.activeTab = idx
     }
   },
   

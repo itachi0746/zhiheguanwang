@@ -1,15 +1,28 @@
 /*@font-face {*/
 
-  /*font-family:'fzztjw';*/
+/*font-family:'fzztjw';*/
 
-  /*src: url('../font/SourceHanSansCN-Normal.otf');*/
+/*src: url('../font/SourceHanSansCN-Normal.otf');*/
 
-  /*font-weight: normal;*/
+/*font-weight: normal;*/
 
-  /*font-style: normal;*/
+/*font-style: normal;*/
 
 /*}*/
 
 /*通用样式*/
 
+.ti2 {
+    text-indent: 2em;
+}
 
+/*分页器颜色*/
+.el-pagination.is-background .el-pager li:not(.disabled).active {
+    background-color: #BE2027;
+}
+/*分页器大小*/
+.el-pagination.is-background .btn-next, .el-pagination.is-background .btn-prev, .el-pagination.is-background .el-pager li {
+    min-width: 40px;
+    height: 40px;
+    line-height: 40px;
+}
