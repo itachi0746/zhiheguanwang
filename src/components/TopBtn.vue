@@ -1,10 +1,12 @@
 <template>
-  <div class="top-btn">
-    <a href="#header"></a>
+  <div class="top-btn" @click="handleClick">
+    <!--<a href="#header"></a>-->
   </div>
 </template>
 
 <script>
+import utils from '../utils/utils'
+
 export default {
   data () {
     return {
@@ -16,6 +18,10 @@ export default {
   computed: {},
 
   methods: {
+
+    handleClick () {
+      utils.scrollToTop();
+    },
   },
   
   created () {},

@@ -26,3 +26,23 @@
     height: 40px;
     line-height: 40px;
 }
+.el-form-item {
+    margin-bottom: 0;
+}
+.el-form-item__label,.el-radio {
+    color: #131313;
+}
+.dn {
+    display: none;
+}
+.el-input__inner {
+    height: 25px;
+    line-height: 25px;
+}
+.el-radio__input.is-checked+.el-radio__label {
+    color: #BE2027;
+}
+.el-radio__input.is-checked .el-radio__inner {
+    border-color: #BE2027;
+    background: #BE2027;
+}

@@ -48,6 +48,7 @@ export default {
       width: 300px;
       height: 50px;
       background-color: #CFA972;
+      cursor: pointer;
     }
     li.active {
       color: #131313;

@@ -3,15 +3,11 @@ import App from './app.vue'
 import '@/utils/rem.js'
 import '@/style/reset.scss'
 import '@/style/common.css'
-import { Button, Carousel, CarouselItem, Form, FormItem, RadioGroup, Radio, Input } from 'element-ui'
+import { Button, Carousel, CarouselItem } from 'element-ui'
 Vue.use(Button)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
-Vue.use(Form)
-Vue.use(FormItem)
-Vue.use(RadioGroup)
-Vue.use(Radio)
-Vue.use(Input)
+
 new Vue({
   el: '#app',
   render: h => h(App)

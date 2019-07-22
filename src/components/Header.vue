@@ -85,8 +85,8 @@ export default {
       cursor: pointer;
     }
     li.active {
-      border-bottom: 2px solid #BE2027;
-      color: #BE2027;
+      border-bottom: 2px solid $activeColor;
+      color: $activeColor;
     }
   }
 </style>

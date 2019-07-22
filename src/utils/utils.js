@@ -634,4 +634,19 @@ export default {
       }
     })
   },
+  /**
+   * 回到顶部
+   */
+  scrollToTop () {
+    let el = document.documentElement;
+    let step = 0;
+    let interval = setInterval(function () {
+      if (el.scrollTop <= 0) {
+        clearInterval(interval);
+        return;
+      }
+      step += 10;
+      el.scrollTop -= step;
+    }, 20);
+  },
 }

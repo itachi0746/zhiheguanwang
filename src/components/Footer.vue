@@ -110,6 +110,6 @@ export default {
     line-height: 37px;
   }
   .main-r div:hover {
-    color: #BE2027;
+    color: $activeColor;
   }
 </style>

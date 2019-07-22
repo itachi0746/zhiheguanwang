@@ -340,10 +340,11 @@ export default {
       height: 180px;
       width: 566px;
       display: flex;
+      margin-bottom: 40px;
     }
   }
   .tab3-li-title {
-    color: #BE2027;
+    color: $activeColor;
     font-size: 18px;
     margin-bottom: 10px;
   }
@@ -402,7 +403,7 @@ export default {
     }
   }
   .tab4-comp-r-body {
-    border: 1px solid #BE2027;
+    border: 1px solid $activeColor;
     font-size: 14px;
     color: #131313;
     padding: 49px 59px;
@@ -419,6 +420,6 @@ export default {
     }
   }
   .comp-color {
-    background-color: #BE2027!important;
+    background-color: $activeColor!important;
   }
 </style>

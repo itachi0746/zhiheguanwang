@@ -365,7 +365,7 @@ export default {
   }
   .p4-li-title {
     font-size: 18px;
-    color: #BE2027;
+    color: $activeColor;
     height: 53px;
     line-height: 53px;
     padding-left: 16px;

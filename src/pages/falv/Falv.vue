@@ -459,7 +459,7 @@ export default {
         {name: '近期新闻', tabId: 3},
       ],
       activeItem: 2,
-      activeTab: 2, // 当前tab
+      activeTab: 0, // 当前tab
     }
   },
 
@@ -575,7 +575,7 @@ export default {
     color: #ffffff;
     font-size: 18px;
     font-weight: bold;
-    background-color: #BE2027;
+    background-color: $activeColor;
     width: 107px;
     height: 36px;
     line-height: 36px;
@@ -615,7 +615,7 @@ export default {
       width: 10px;
       height: 10px;
       margin-right: 10px;
-      background-color: #BE2027;
+      background-color: $activeColor;
       display: inline-block;
       border-radius: 50%;
     }
@@ -706,7 +706,7 @@ export default {
       border-bottom: 1px solid #DEDEDE;
     }
     li:hover {
-      color: #BE2027;
+      color: $activeColor;
     }
   }
   .tab3-pg {
