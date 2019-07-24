@@ -4,8 +4,8 @@
       <div class="logo">
       </div>
       <div class="header-ul-box">
-        <ul class="header-ul">
-          <li :class="{'active': index===activeItem}" v-for="(item,index) in hData" :key="index" @click="clickLi(item.link)">{{item.name}}</li>
+        <ul class="header-ul" v-if="hData.length">
+          <li :class="{'active': item.partCode===activeItem}" v-for="(item,index) in hData" :key="index" @click="clickLi(item.link)">{{item.name}}</li>
         </ul>
       </div>
 
@@ -15,31 +15,73 @@
 </template>
 
 <script>
+import * as http from '../utils/core/http'
+import * as _ from 'underscore'
 export default {
   name: 'Header',
   data () {
     return {
-      hData: [
-        {name: '首页', link: 'index.html'},
-        {name: '关于我们', link: 'about.html'},
-        {name: '法律服务', link: 'falv.html'},
-        {name: '业务类别', link: 'yewu.html'},
-        {name: '战略研究', link: 'zhanlue.html'},
-        {name: '联系我们', link: 'contact.html'},
-      ]
+      codeData: [ // partCode: 对照码 跟后台配置的保持一致
+        {partCode: 'L1', link: 'index.html'},
+        {partCode: 'L2', link: 'about.html'},
+        {partCode: 'L3', link: 'falv.html'},
+        {partCode: 'L4', link: 'yewu.html'},
+        {partCode: 'L5', link: 'zhanlue.html'},
+        {partCode: 'L6', link: 'contact.html'},
+      ],
+      hData: [],
+      resData: null
     }
   },
   props: {
     activeItem: {
-      type: Number,
-      default: 0
+      type: String,
+      default: 'L1'
     }
   },
   created () {
+    this.getInfo()
+
+  },
+  mounted () {
   },
   methods: {
     clickLi (link) {
       window.location.href = link
+    },
+    async getInfo () {
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const ParentId = ''
+      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
+
+      const result = await http.post(url, {})
+      console.log(result)
+      this.resData = result.Data
+      for (let obj of this.resData) {
+        for (let obj2 of this.codeData) {
+          if (obj.CM01_PART_CODE === obj2.partCode) { // 相同则添加
+            obj2.name = obj.CM01_FULL_NAME_1 // 名字
+            obj2.orderNo = obj.CM01_VIEW_ORDER // 排序用的key
+            this.hData.push(obj2)
+          }
+        }
+      }
+      this.hData = _.sortBy(this.hData, 'orderNo') // 排序
+      this.$emit('initHeader', this.resData)
+
+    },
+    handleData () {
+      for (let obj of this.resData) {
+        for (let obj2 of this.codeData) {
+          if (obj.CM01_PART_CODE === obj2.partCode) { // 相同则添加
+            obj2.name = obj.CM01_FULL_NAME_1 // 名字
+            obj2.orderNo = obj.CM01_VIEW_ORDER
+            this.hData.push(obj2)
+          }
+        }
+      }
+      this.hData = _.sortBy(this.hData, 'orderNo') // 排序
     }
   }
 }

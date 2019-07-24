@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :activeItem="activeItem"/>
+    <Header v-if="resData" :resData="resData" :activeItem="activeItem"/>
     <Lunbo v-if="lunboArr" :imgArr="lunboArr" />
     <div>
       <div class="tab-box">
@@ -458,7 +458,8 @@ export default {
         {name: '行业新闻', tabId: 2},
         {name: '近期新闻', tabId: 3},
       ],
-      activeItem: 2,
+      resData: null,
+      activeItem: 'L3',
       activeTab: 0, // 当前tab
     }
   },
@@ -474,7 +475,16 @@ export default {
   computed: {},
 
   methods: {
+    async getInfo () {
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const ParentId = ''
+      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
+      const result = await http.post(url, {})
+      console.log(result)
+      this.resData = result.Data
 
+    },
     clickNews () {
       window.location.href = 'news.html'
     },
@@ -483,7 +493,10 @@ export default {
     }
   },
   
-  created () {},
+  created () {
+    this.getInfo()
+
+  },
 
   mounted () {
 

@@ -14,7 +14,7 @@ export default {
     Index
   },
   created () {
-    console.log(process.env)
+//    console.log(process.env)
   },
   methods: {
     // 接口调用示例

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :activeItem="activeItem"/>
+    <Header v-if="resData" :resData="resData" :activeItem="activeItem"/>
     <Lunbo v-if="lunboArr" :imgArr="lunboArr" />
     <div class="main-box w1200">
       <ul class="icon-list">
@@ -43,7 +43,8 @@ export default {
         {img: require('./assets/banner.png')},
         {img: require('./assets/banner2.png')},
       ],
-      activeItem: 5,
+      resData: null,
+      activeItem: 'L6',
       activeTab: 3, // 当前tab
       tabData: [
         {name: '知识产权基础理论', tabId: 0},
@@ -81,10 +82,22 @@ export default {
     changeTab (idx) {
       this.activeTab = idx
     },
+    async getInfo () {
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const ParentId = ''
+      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
+      const result = await http.post(url, {})
+      console.log(result)
+      this.resData = result.Data
 
+    }
   },
   
-  created () {},
+  created () {
+    this.getInfo()
+
+  },
 
   mounted () {
 

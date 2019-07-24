@@ -156,7 +156,7 @@ export default {
    * 把对象转为formdata
    * @param dataObj
    */
-  createFormData2: function (dataObj) {
+  obj2FormData: function (dataObj) {
     let form = new FormData()
     for (let key in dataObj) {
       if (!dataObj[key]) {

@@ -2,9 +2,16 @@
 import axios from 'axios';
 import cookie from './cookie.js'
 // 默认配置
-axios.defaults.timeout = 10000; // 超时
+axios.defaults.timeout = 100000; // 超时
 axios.defaults.baseURL = process.env.VUE_APP_BASE_URL; // 不同环境下的BASE_URL
 console.log(axios.defaults.baseURL)
+axios.defaults.transformRequest = [function (data) {
+  let ret = '';
+  for (let key in data) {
+    ret += encodeURIComponent(key) + '=' + encodeURIComponent(data[key]) + '&'
+  }
+  return ret
+}]
 
 // 请求拦截
 axios.interceptors.request.use(function (config) {
@@ -46,11 +53,14 @@ export async function post(url, params = {}) {
   try {
         console.log(`开始访问: ${theUrl}`)
         let res = await axios.post(url, params);
-        return new Promise((resolve) => {
-            var data = res.body
-            // if (data.retcode === 0) {
-                resolve(res.data);
-            // }
+        return new Promise((resolve, reject) => { // 返回promise对象
+          // console.log(res)
+          if (!res.data.Success) {
+            reject(res.data.ErrMsg) // 把错误信息传下去
+          } else {
+            resolve(res.data) // 把数据传下去
+          }
+
         })
     } catch (err) {
         console.log(`请求出错: ${theUrl}`)

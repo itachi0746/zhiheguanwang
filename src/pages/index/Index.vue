@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header :activeItem="activeItem"/>
+    <Header :activeItem="activeItem" @initHeader="handleHeader"/>
     <Lunbo v-if="lunboArr" :imgArr="lunboArr" />
 
     <div class="index">
@@ -146,7 +146,10 @@ import TopBtn from '../../components/TopBtn.vue'
 export default {
   data () {
     return {
-      activeItem: 0,
+      parentId: null, // 父栏目id
+      partId: null, // 栏目id
+      activeItem: 'L1',
+      resData: null, // 请求的数据
       lunboArr: [
         {img: require('./assets/banner.png')},
         {img: require('./assets/banner2.png')},
@@ -200,9 +203,51 @@ export default {
 
   computed: {},
 
-  methods: {},
+  methods: {
+    async getInfo () {
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const ParentId = ''
+      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
+      const result = await http.post(url, {})
+      console.log(result)
+      this.resData = result.Data
+      for (let obj of this.resData) {
+        if (obj.CM01_PART_CODE === this.activeItem) { // 找到自己的栏目id,父栏目id
+          this.partId = obj.CM01_PART_ID
+          this.parentId = obj.CM01_PARENT_ID
+        }
+      }
+    },
+    /**
+     * 处理头部传来的数据
+     * @param data 传来的数据 数组
+     */
+    handleHeader (data) {
+      this.resData = data
+      for (let obj of this.resData) {
+        if (obj.CM01_PART_CODE === this.activeItem) { // 找到自己的栏目id,父栏目id
+          this.partId = obj.CM01_PART_ID
+          this.parentId = obj.CM01_PARENT_ID
+        }
+      }
+//      this.getTabData()
+    },
+    /**
+     * 获取tab切换的数据
+     */
+    async getTabData () {
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const ParentId = this.partId
+      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
+      const result = await http.post(url, {})
+      console.log(result)
+    }
+  },
   
-  created () {},
+  created () {
+  },
 
   mounted () {},
 

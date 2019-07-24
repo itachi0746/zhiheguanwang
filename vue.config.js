@@ -47,16 +47,16 @@ module.exports = {
   },
   devServer: {
     port: 83,
-    proxy: {
-      '/api': {
-        target: 'http://localhost:16789/ActivityHotelService',
-        ws: true,
-        changeOrigin: true,
-        pathRewrite: {
-          '^/api': ''
-        }
-      }
-    } // 配置开发环境 URL 便于本地开发调试
+    // proxy: { // 用了nginx代理
+      // '/api': {
+      //   target: 'http://api2.jierutek.com:8080',
+      //   ws: true,
+      //   changeOrigin: true,
+      //   pathRewrite: {
+      //     '^/api': ''
+      //   }
+      // }
+    // } // 配置开发环境 URL 便于本地开发调试
   },
   chainWebpack: (config) => {
     config.plugins.delete('named-chunks')
