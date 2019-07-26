@@ -1,8 +1,8 @@
 <template>
   <div>
-    <Header v-if="resData" :resData="resData" :activeItem="activeItem"/>
-    <Lunbo v-if="lunboArr" :imgArr="lunboArr" />
-    <div>
+    <Header :activeItem="activeItem" @initHeader="handleHeader"/>
+    <Lunbo v-if="lunboArr" :imgArr="lunboArr"/>
+    <div v-if="!showNews">
       <div class="tab-box">
         <div class="w1200">
           <TabComp v-if="tabData.length" :activeTab="activeTab" :tabData="tabData" @changeTab="changeTab"></TabComp>
@@ -304,7 +304,9 @@
                 <div class="tab2-title-ss">(1)请求书</div>
                 <div>包括实用新型专利的名称、发明人或设计人的姓名、申请人的姓名和名称、地址等。</div>
                 <div class="tab2-title-ss">(2)说明书</div>
-                <div class="lh28">包括实用新型专利的名称、所属技术领域、背景技术、发明内容、附图说明和具体实施方式。说明书内容的撰写应当详尽，所述的技术内容应以所属技术领域的普通技术人员阅读后能予以实现为准。</div>
+                <div class="lh28">
+                  包括实用新型专利的名称、所属技术领域、背景技术、发明内容、附图说明和具体实施方式。说明书内容的撰写应当详尽，所述的技术内容应以所属技术领域的普通技术人员阅读后能予以实现为准。
+                </div>
                 <div class="tab2-title-ss">(3)权利要求书</div>
                 <div>说明实用新型的技术特征，清楚、简要地表述请求保护的内容。</div>
                 <div class="tab2-title-ss">(4)说明书附图</div>
@@ -374,18 +376,21 @@
           </div>
 
         </div>
+        <!--行业新闻-->
         <div class="tab3" v-if="activeTab===2">
-          <ul class="tab3-ul">
-            <li @click="clickNews">
-              <div class="tab3-li-img tab3-li-test"></div>
+          <ul class="tab3-ul" v-if="showNewsArr.length">
+            <li @click="clickNews(item.detail)" v-for="(item,index) in showNewsArr" :key="index">
+              <!--<div class="tab3-li-img tab3-li-test"></div>-->
+              <div class="tab3-li-img" :style="{'backgroundImage': `url(${item.img})`}"></div>
+
               <div class="tab3-li-ct">
-                <div class="tab3-li-ct-title">新专利曝光！苹果也加入折叠屏战场</div>
+                <div class="tab3-li-ct-title">{{item.title}}</div>
                 <div class="tab3-li-ct-main">
-                  美国专利商标局今天正式公布了苹果获得的85项新专利。在这篇文章中，给大家介绍一项涉及未来可能的可折叠苹果产品的专利——具有可折叠显示器和盖子的苹果产品。这项专利涉及具有柔性或...
+                  {{item.summary}}
                 </div>
                 <div class="tab3-li-ct-time">
                   <img src="./assets/clock.png" alt="">
-                  <span>2019-6-17</span>
+                  <span>{{item.time}}</span>
                 </div>
               </div>
             </li>
@@ -397,26 +402,33 @@
             <el-pagination
               background
               layout="prev, pager, next"
-              :total="1000">
+              :page-size="numPerPage"
+              :current-page="curPage"
+              @current-change="handleCurrentChange"
+              :total="newsData1.length">
             </el-pagination>
           </div>
 
         </div>
+        <!--近期新闻-->
         <div class="tab4" v-if="activeTab===3">
-          <ul class="tab3-ul">
-            <li @click="clickNews">
-              <div class="tab3-li-img tab3-li-test"></div>
+          <ul class="tab3-ul" v-if="showNewsArr.length">
+            <li @click="clickNews(item.detail)" v-for="(item,index) in showNewsArr" :key="index">
+              <!--<div class="tab3-li-img tab3-li-test"></div>-->
+              <div class="tab3-li-img" :style="{'backgroundImage': `url(${item.img})`}"></div>
+
               <div class="tab3-li-ct">
-                <div class="tab3-li-ct-title">新专利曝光！苹果也加入折叠屏战场</div>
+                <div class="tab3-li-ct-title">{{item.title}}</div>
                 <div class="tab3-li-ct-main">
-                  美国专利商标局今天正式公布了苹果获得的85项新专利。在这篇文章中，给大家介绍一项涉及未来可能的可折叠苹果产品的专利——具有可折叠显示器和盖子的苹果产品。这项专利涉及具有柔性或...
+                  {{item.summary}}
                 </div>
                 <div class="tab3-li-ct-time">
                   <img src="./assets/clock.png" alt="">
-                  <span>2019-6-17</span>
+                  <span>{{item.time}}</span>
                 </div>
               </div>
             </li>
+
           </ul>
 
           <!--分页-->
@@ -424,10 +436,29 @@
             <el-pagination
               background
               layout="prev, pager, next"
-              :total="1000">
+              :page-size="numPerPage"
+              :current-page="curPage2"
+              @current-change="handleCurrentChange2"
+              :total="newsData2.length">
             </el-pagination>
           </div>
 
+        </div>
+      </div>
+    </div>
+    <div v-else>
+      <div class="main-box w1200">
+        <div class="loca">
+          <div class="loca-label">当前位置: </div>
+          <el-breadcrumb separator-class="el-icon-arrow-right">
+            <el-breadcrumb-item onclick="window.location.href='falv.html'">法律服务</el-breadcrumb-item>
+            <el-breadcrumb-item @click.native="clickBack">行业新闻</el-breadcrumb-item>
+          </el-breadcrumb>
+        </div>
+        <div class="w850">
+          <div class="news-ct" v-html="newsDetail">
+
+          </div>
         </div>
       </div>
     </div>
@@ -444,23 +475,34 @@ import Footer from '../../components/Footer.vue'
 import Lunbo from '../../components/Lunbo.vue'
 import TopBtn from '../../components/TopBtn.vue'
 import TabComp from '../../components/TabComp.vue'
+import * as _ from 'underscore'
 
 export default {
   data () {
     return {
+      parentId: null, // 父栏目id
+      partId: null, // 栏目id
       lunboArr: [
-        {img: require('./assets/banner.png')},
-        {img: require('./assets/banner2.png')},
+        { img: require('./assets/banner.png') },
+        { img: require('./assets/banner2.png') }
       ],
       tabData: [
-        {name: '服务咨询', tabId: 0},
-        {name: '申请流程', tabId: 1},
-        {name: '行业新闻', tabId: 2},
-        {name: '近期新闻', tabId: 3},
+        //        {name: '服务咨询', tabId: 0},
+        //        {name: '申请流程', tabId: 1},
+        //        {name: '行业新闻', tabId: 2},
+        //        {name: '近期新闻', tabId: 3},
       ],
       resData: null,
       activeItem: 'L3',
       activeTab: 0, // 当前tab
+      newsData1: [], // 行业新闻 储存
+      newsData2: [], // 近期新闻 储存
+      showNews: false, // 是否显示新闻详情
+      newsDetail: '', // 新闻详情
+      numPerPage: 2, // 每页显示条数
+      showNewsArr: [], // 新闻数组 展示
+      curPage: 1, // 当前页(行业新闻)
+      curPage2: 1, // 当前页(近期新闻)
     }
   },
 
@@ -475,26 +517,142 @@ export default {
   computed: {},
 
   methods: {
-    async getInfo () {
-      const EntId = process.env.VUE_APP_TEST_ENTID
-      const OrgId = process.env.VUE_APP_TEST_ORGID
-      const ParentId = ''
-      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
-      const result = await http.post(url, {})
-      console.log(result)
-      this.resData = result.Data
-
-    },
-    clickNews () {
-      window.location.href = 'news.html'
+    /**
+     * 点击新闻li
+     * @param ct 新闻详情 字符串
+     */
+    clickNews (ct) {
+      this.newsDetail = ct
+      this.showNews = true
     },
     changeTab (idx) {
       this.activeTab = idx
+      if (this.activeTab === 2) { // 行业新闻
+        if (!this.newsData1.length) {
+          this.getNewsData()
+        } else {
+          this.handleShowNewsArr()
+        }
+      }
+      if (this.activeTab === 3) { // 近期新闻
+        if (!this.newsData2.length) {
+          this.getNewsData()
+        } else {
+          this.handleShowNewsArr()
+        }
+      }
+    },
+    /**
+     * 处理头部传来的数据
+     * @param data 传来的数据 数组
+     */
+    handleHeader (data) {
+      this.resData = data
+      for (let obj of this.resData) {
+        if (obj.CM01_PART_CODE === this.activeItem) { // 根据栏目code, 找到自己的栏目id,父栏目id
+          this.partId = obj.CM01_PART_ID
+          this.parentId = obj.CM01_PARENT_ID
+        }
+      }
+      this.getTabData()
+    },
+    /**
+     * 获取tab切换(子栏目)的数据
+     */
+    async getTabData () {
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const ParentId = this.partId
+      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
+      const result = await http.post(url, {})
+      //      console.log(result)
+      if (!result.Data.length) {
+        console.log('result 为空')
+        return
+      }
+      for (let obj of result.Data) {
+        this.tabData.push({ name: obj.CM01_FULL_NAME_1, orderNo: obj.CM01_VIEW_ORDER, partId: obj.CM01_PART_ID })
+      }
+      this.tabData = _.sortBy(this.tabData, 'orderNo')
+    },
+    /**
+     * 请求新闻数据
+     * @returns {Promise.<void>}
+     */
+    async getNewsData () {
+      this.showNewsArr = [] // 清空
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const PartId = this.tabData[this.activeTab]['partId']
+      const url = `/PartContent/Search?EntId=${EntId}&OrgId=${OrgId}&PartId=${PartId}`
+      const result = await http.post(url, {})
+//      console.log(result)
+      if (!result.Data.length) {
+        console.log('result 为空')
+        return
+      }
+      this.handleNewsData(result.Data)
+    },
+    /**
+     * 处理新闻数据
+     * @param data 数组 新闻数据
+     */
+    handleNewsData (data) {
+      let arr = []
+      for (let obj of data) {
+        arr.push({
+          title: obj.CM03_FULL_TITILE,
+          summary: obj.CM03_SUMMARY,
+          img: obj.CM03_PIC_URL1,
+          time: utils.handleTime(obj.CM03_CHG_TIME),
+          detail: obj.CM03_TEXT
+        })
+      }
+      this.activeTab === 2 ? this.newsData1 = arr : this.newsData2 = arr
+
+      this.handleShowNewsArr()
+    },
+    /**
+     * 点击行业新闻
+     */
+    clickBack () {
+      this.showNews = false
+    },
+    /**
+     * 处理页数改变
+     * @param val
+     */
+    handleCurrentChange (val) {
+      console.log(`当前页: ${val}`)
+      this.curPage = val // 记录当前页
+      this.handleShowNewsArr()
+    },
+    handleCurrentChange2 (val) {
+      console.log(`当前页: ${val}`)
+      this.curPage2 = val // 记录当前页
+      this.handleShowNewsArr()
+    },
+    /**
+     * 处理要显示的新闻列表
+     */
+    handleShowNewsArr () {
+      this.showNewsArr = []
+      let targetArr
+      let targetPage
+      if (this.activeTab === 2) {
+        targetArr = this.newsData1
+        targetPage = this.curPage
+      } else {
+        targetArr = this.newsData2
+        targetPage = this.curPage2
+      }
+      const start = (targetPage - 1) * 2 // 起始
+      const end = start + this.numPerPage // 结束
+      this.showNewsArr = targetArr.slice(start, end)
     }
   },
-  
+
   created () {
-    this.getInfo()
 
   },
 
@@ -511,6 +669,12 @@ export default {
     width: 1200px;
     margin: 0 auto;
   }
+
+  .w850 {
+    width: 850px;
+    margin: 0 auto;
+  }
+
   .tab-box {
     background-color: #E5E5E5;
     color: #ffffff;
@@ -521,11 +685,33 @@ export default {
   .tab-ul li:nth-last-child(1) {
     border: 0px;
   }
+
   .main-box {
-    font-size: 14px;
+    font-size: 16px;
     color: #666666;
     margin-bottom: 100px;
   }
+
+  .loca {
+    padding: 20px 0px;
+    border-bottom: 1px solid #E5E5E5;
+    margin-bottom: 30px;
+    display: flex;
+    align-items: center;
+  }
+
+  .news-ct {
+    ::v-deep * {
+      color: #333 !important;
+      /*font-size: 14px!important;*/
+      font-family: MicrosoftYaHei;
+      line-height: 32px;
+    }
+    ::v-deep img {
+      max-width: 850px;
+    }
+  }
+
   .tab1 {
     justify-content: space-between;
     display: flex;
@@ -550,14 +736,17 @@ export default {
       height: 220px;
     }
   }
+
   .tab1-li-ct {
     padding: 20px 0px;
   }
+
   .tab1-li-data {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
   }
+
   .tab1-li-data-item {
     min-width: 50%;
     margin-bottom: 19px;
@@ -569,21 +758,26 @@ export default {
       margin-right: 9px;
     }
   }
+
   .tab1-li-name span:nth-child(1) {
     font-size: 18px;
     font-weight: bold;
     margin-right: 10px;
   }
+
   .tab1-li-name {
     margin-bottom: 16px;
   }
+
   .tab2 {
     font-size: 16px;
     color: #131313;
   }
+
   .tab2-title-box {
     margin-bottom: 30px;
   }
+
   .tab2-title {
     color: #ffffff;
     font-size: 18px;
@@ -594,22 +788,27 @@ export default {
     line-height: 36px;
     text-align: center;
   }
+
   .tab2-step {
     font-weight: bold;
     margin-bottom: 20px;
     font-size: 18px;
   }
+
   .tab2-part1 {
     display: flex;
     justify-content: space-between;
     margin-bottom: 60px;
   }
+
   .tab2-part1 > div {
     width: 551px;
   }
+
   .tab2-part1 .tab2-part1-div2 {
     width: 600px;
   }
+
   .tab2-part1-img1 {
     width: 551px;
     height: 297px;
@@ -617,9 +816,11 @@ export default {
     background: url("./assets/shangbiaosengqinag.png") no-repeat;
     background-size: 100% 100%;
   }
+
   .pl20 {
     padding-left: 20px;
   }
+
   .tab2-title-s {
     font-size: 16px;
     font-weight: bold;
@@ -633,19 +834,23 @@ export default {
       border-radius: 50%;
     }
   }
+
   .mt20 {
     margin-top: 20px;
   }
+
   .step-box {
     padding: 20px 0px 30px;
     overflow: hidden;
   }
+
   .step-comp {
     width: 135px;
     height: 96px;
     text-align: center;
     float: left;
   }
+
   .step-comp-img {
     margin-bottom: 9px;
     width: 100%;
@@ -654,57 +859,70 @@ export default {
       height: 56px;
     }
   }
+
   .step-comp-font {
     width: 100%;
   }
+
   .step-box-arrow {
     float: left;
     margin-top: 20px;
   }
+
   .lh26 {
     line-height: 26px;
   }
+
   .lh28 {
     line-height: 28px;
   }
+
   .fz18 {
     font-size: 18px;
   }
+
   .tab2-title-ss {
     font-weight: bold;
     margin-top: 20px;
     margin-bottom: 5px;
   }
+
   .tab2-part2-2 {
     display: flex;
     margin-bottom: 60px;
   }
+
   .tab2-part2-2-l {
     width: 660px;
   }
+
   .tab2-part2-2-r {
     width: 255px;
     height: 255px;
   }
+
   .tab2-part2-2-r-bg1 {
     width: 280px;
     height: 280px;
     background: url("./assets/famingzhuanli.png") no-repeat;
     background-size: contain;
-    margin: 10px 0 0  189px;
+    margin: 10px 0 0 189px;
 
   }
+
   .tab2-part2-2-r-bg2 {
     background: url("./assets/xinxingzhuanli.png") no-repeat;
     background-size: contain;
-    margin: 10px 0 0  174px;
+    margin: 10px 0 0 174px;
 
   }
+
   .tab2-part2-2-r-bg3 {
     background: url("./assets/waiguanzhaunli.png") no-repeat;
     background-size: contain;
-    margin: 10px 0 0  189px;
+    margin: 10px 0 0 189px;
   }
+
   .tab3-ul {
     display: flex;
     justify-content: space-between;
@@ -722,21 +940,26 @@ export default {
       color: $activeColor;
     }
   }
+
   .tab3-pg {
     display: flex;
     justify-content: center;
     padding-top: 20px;
   }
+
   .tab3-li-img {
     width: 125px;
     height: 126px;
     margin-right: 20px;
+    background-size: contain;
 
   }
+
   .tab3-li-test {
     background: url("./assets/test.png") no-repeat;
     background-size: contain;
   }
+
   .tab3-li-ct-time {
     display: flex;
     align-items: center;
@@ -744,15 +967,28 @@ export default {
     img {
       width: 20px;
       height: 20px;
+      margin-right: 9px;
     }
   }
+
   .tab3-li-ct-title {
-    margin-bottom: 10px;
+    /*margin-bottom: 10px;*/
+    margin-bottom: 5px;
   }
+
   .tab3-li-ct-main {
-    line-height: 24px;
+    line-height: 20px;
+    height: 63px;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
+
   .tab3-li-ct {
     width: 421px;
+  }
+
+  .loca-label {
+    margin-right: 5px;
+    line-height: 1;
   }
 </style>

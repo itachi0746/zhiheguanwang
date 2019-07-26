@@ -1,24 +1,26 @@
 <template>
   <div class="type-list-big-search">
     <!--分类搜索-->
-    <el-form :inline="true"  ref="form" :model="form" label-width="">
-      <el-form-item label="商品和服务项目检索：">
-        <el-input v-model="form.name"></el-input>
-      </el-form-item>
+    <div v-if="form">
+      <el-form :inline="true"  ref="form" :model="form" label-width="" @submit.native.prevent>
+        <el-form-item label="商品和服务项目检索：">
+          <el-input v-model="form.name"></el-input>
+        </el-form-item>
 
-      <el-form-item label="">
-        <el-radio-group v-model="form.resource">
-          <el-radio label="名称"></el-radio>
-          <el-radio label="英文名称"></el-radio>
-          <el-radio label="编号"></el-radio>
-          <el-radio label="类别"></el-radio>
-        </el-radio-group>
-      </el-form-item>
+        <!--<el-form-item label="">-->
+        <!--<el-radio-group v-model="form.resource">-->
+        <!--<el-radio label="名称"></el-radio>-->
+        <!--<el-radio label="英文名称"></el-radio>-->
+        <!--<el-radio label="编号"></el-radio>-->
+        <!--<el-radio label="类别"></el-radio>-->
+        <!--</el-radio-group>-->
+        <!--</el-form-item>-->
 
-      <el-form-item label="">
-        <button class="s-btn" @click="onSubmit">商品搜索</button>
-      </el-form-item>
-    </el-form>
+        <el-form-item label="">
+          <button class="s-btn" @click="onSubmit">商品搜索</button>
+        </el-form-item>
+      </el-form>
+    </div>
   </div>
 </template>
 
@@ -26,10 +28,16 @@
 export default {
   data () {
     return {
-      form: {
-        name: '',
-        resource: '',
-      }
+//      form: {
+//        name: '',
+//        resource: '',
+//      }
+    }
+  },
+  props: {
+    form: {
+      default: null,
+      type: Object
     }
   },
 
@@ -39,7 +47,8 @@ export default {
 
   methods: {
     onSubmit () {
-
+      debugger
+      this.$emit('clickSearch', this.form)
     }
   },
   

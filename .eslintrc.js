@@ -21,6 +21,8 @@ module.exports = {
     'import/no-extraneous-dependencies': ['error', { devDependencies: true }],
     'vue/max-attributes-per-line': 'off',
     'vue/require-prop-types': 'off',
+    'vue/order-in-components': 'off',
+    'vue/*': 'off',
     'quotes': [ 'error', 'single' ],
     'one-var': 'off',
     'indent': ["error", 2, { "ignoreComments": true }],

@@ -55,4 +55,7 @@ export default {
       background-color: #fff;
     }
   }
+  .tab-ul li:nth-last-child(1) {
+    border: 0px;
+  }
 </style>

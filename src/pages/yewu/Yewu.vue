@@ -1,6 +1,6 @@
 <template>
   <div>
-    <Header v-if="resData" :resData="resData" :activeItem="activeItem"/>
+    <Header :activeItem="activeItem" @initHeader="handleHeader"/>
     <Lunbo v-if="lunboArr" :imgArr="lunboArr" />
     <div>
       <div class="tab-box">
@@ -14,34 +14,35 @@
         <div class="tab1" v-if="activeTab===0">
           <div class="tab1-ct">
             <!--分类-->
-            <ul class="type-list">
-              <li v-for="(item,index) in typeList" :key="index">{{item.name}}</li>
+            <ul class="type-list" v-if="typeList.length">
+              <li v-for="(item,index) in typeList" :key="index" @click="clickType(item.partId)">{{item.name}}</li>
             </ul>
             <!--分类大框-->
-            <div class="type-list-big" v-if="true">
-              <TypeSearch></TypeSearch>
-              <ul class="type-list-big-ct">
-                <li>
-                  <div class="li-label">第一类</div>
+            <div class="type-list-big" v-if="!showDetail">
+              <TypeSearch :form="formdata" @clickSearch="clickSearch"></TypeSearch>
+              <ul class="type-list-big-ct" v-if="typeBigList.length">
+                <li v-for="(item,index) in typeBigList" :key="index" @click="clickType(item.partId)">
+                  <div class="li-label">{{item.name}}</div>
                   <div class="li-ct">
-                    颜料，清漆，漆；防锈剂和木材防腐剂；着色剂；媒染剂；未加工的天然树脂；绘画、装饰、印刷和艺术用金属箔及金属粉
+                    {{item.summary}}
                   </div>
                 </li>
-                <li>
-                  <div class="li-label">第一类</div>
-                  <div class="li-ct">
-                    颜料，清漆，漆；防锈剂和木材防腐剂；着色剂；媒染剂；未加工的天然树脂；绘画、装饰、印刷和艺术用金属箔及金属粉
-                  </div>
-                </li>
+                <!--<li>-->
+                  <!--<div class="li-label">第一类</div>-->
+                  <!--<div class="li-ct">-->
+                    <!--颜料，清漆，漆；防锈剂和木材防腐剂；着色剂；媒染剂；未加工的天然树脂；绘画、装饰、印刷和艺术用金属箔及金属粉-->
+                  <!--</div>-->
+                <!--</li>-->
               </ul>
             </div>
             <!--分类 具体内容-->
-            <div class="type-detail" v-if="false">
+            <div class="type-detail" v-else>
               <div class="type-detail-title">
-                用于工业、科学、摄影、农业、园艺和林业的化学品；未加工人造合成树脂；未加工塑料物质；肥料；灭火用合成物；淬火和焊接用制剂；保存食品用化学品；鞣料；工业用粘合剂
+                {{typeSummary}}
               </div>
-              <TypeSearch></TypeSearch>
-              <div class="type-detail-main"></div>
+              <TypeSearch :form="formdata" @clickSearch="clickSearch"></TypeSearch>
+              <div class="type-detail-main" v-html="typeDetail">
+              </div>
             </div>
           </div>
 
@@ -161,30 +162,40 @@ import Lunbo from '../../components/Lunbo.vue'
 import TopBtn from '../../components/TopBtn.vue'
 import TabComp from '../../components/TabComp.vue'
 import TypeSearch from '../../components/TypeSearch.vue'
+import * as _ from 'underscore'
 
 export default {
   data () {
     return {
+      parentId: null, // 父栏目id
+      partId: null, // 栏目id
       lunboArr: [
         {img: require('./assets/banner.png')},
         {img: require('./assets/banner2.png')},
       ],
       activeItem: 'L4',
       resData: null, // 请求的数据
-      activeTab: 3, // 当前tab
-      tabData: [
-        {name: '商标分类', tabId: 0},
-        {name: '发明专利', tabId: 1},
-        {name: '实用新型', tabId: 2},
-        {name: '外观专利', tabId: 3},
+      activeTab: 0, // 当前tab
+      tabData: [ // 二级栏目
+//        {name: '商标分类', tabId: 0},
+//        {name: '发明专利', tabId: 1},
+//        {name: '实用新型', tabId: 2},
+//        {name: '外观专利', tabId: 3},
       ],
       typeList: [ // 类别列表
-        {name: '第一类'},
-        {name: '第二类'},
-        {name: '第三类'},
-        {name: '第四类'},
+//        {name: '第一类'},
+//        {name: '第二类'},
+//        {name: '第三类'},
+//        {name: '第四类'},
       ],
-
+      typeDetail: '', // 分类详情内容
+      typeSummary: '', // 分类title
+      showDetail: false, // 显示分类详情
+      typeBigList: [], // 右侧类别列表
+      formdata: { // 搜索keyword
+        name: '',
+        resource: ''
+      }
     }
   },
 
@@ -209,20 +220,171 @@ export default {
     changeTab (idx) {
       this.activeTab = idx
     },
-    async getInfo () {
+    /**
+     * 处理头部传来的数据
+     * @param data 传来的数据 数组
+     */
+    handleHeader (data) {
+      this.resData = data
+      for (let obj of this.resData) {
+        if (obj.CM01_PART_CODE === this.activeItem) { // 根据栏目code, 找到自己的栏目id,父栏目id
+          this.partId = obj.CM01_PART_ID
+          this.parentId = obj.CM01_PARENT_ID
+        }
+      }
+      this.getTabData()
+    },
+    /**
+     * 获取tab切换(子栏目)的数据
+     */
+    async getTabData () {
       const EntId = process.env.VUE_APP_TEST_ENTID
       const OrgId = process.env.VUE_APP_TEST_ORGID
-      const ParentId = ''
+      const ParentId = this.partId
       const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
       const result = await http.post(url, {})
+      //      console.log(result)
+      if (!result.Data.length) {
+        console.log('result 为空')
+        return
+      }
+      for (let obj of result.Data) {
+        this.tabData.push({ name: obj.CM01_FULL_NAME_1, orderNo: obj.CM01_VIEW_ORDER, partId: obj.CM01_PART_ID })
+      }
+      this.tabData = _.sortBy(this.tabData, 'orderNo')
+      this.getTypeData()
+      this.getTypeBigListData()
+    },
+    /**
+     * 获取分类数据(三级栏目)
+     * @returns {Promise.<void>}
+     */
+    async getTypeData () {
+      if (this.activeTab === 0) {
+        const EntId = process.env.VUE_APP_TEST_ENTID
+        const OrgId = process.env.VUE_APP_TEST_ORGID
+        const ParentId = this.tabData[this.activeTab]['partId']
+        const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}&ParentId=${ParentId}`
+        const result = await http.post(url, {})
+              console.log(result)
+        if (!result.Data.length) {
+          console.log('result 为空')
+          return
+        }
+        for (let obj of result.Data) {
+          this.typeList.push({
+            name: obj.CM01_FULL_NAME_1,
+            orderNo: obj.CM01_VIEW_ORDER,
+            partId: obj.CM01_PART_ID,
+            desc: obj.CM01_DESC
+          })
+        }
+        this.typeList = _.sortBy(this.typeList, 'orderNo')
+      }
+    },
+    /**
+     * 请求分类 内容详情数据
+     * @param partId 栏目id
+     * @param desc 分类简单描述
+     * @returns {Promise.<void>}
+     */
+    async getTypeDetailData (partId, desc) {
+      this.typeDetail = '' // 清空
+      this.typeSummary = ''
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const PartId = partId
+      const url = `/PartContent/Search?EntId=${EntId}&OrgId=${OrgId}&PartId=${PartId}`
+      const result = await http.post(url, {})
+      //      console.log(result)
+      if (!result.Data.length) {
+        console.log('result 为空')
+        return
+      }
+      this.typeDetail = result.Data[0]['CM03_TEXT']
+      this.typeSummary = result.Data[0]['CM03_SUMMARY']
+    },
+    /**
+     * 搜索
+     * @returns {Promise.<void>}
+     */
+    async doSearch () {
+      const kw = this.formdata.name
+      if (!kw) {
+        console.log('关键字为空!')
+        return
+      }
+      this.showDetail = true
+      this.typeDetail = '' // 清空
+      this.typeSummary = ''
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const PartId = this.tabData[this.activeTab]['partId']
+      const url = `/PartContent/Search?EntId=${EntId}&OrgId=${OrgId}&PartId=${PartId}`
+      const data = {
+        CT_KEY_WORDS: kw
+      }
+      const result = await http.post(url, data)
+            console.log(result)
+      if (!result.Data.length) {
+        console.log('result 为空')
+        return
+      }
+      this.typeDetail = result.Data[0]['CM03_TEXT']
+      this.typeSummary = result.Data[0]['CM03_SUMMARY']
+      this.formdata.name = '' // 清空搜索框
+    },
+    /**
+     * 获取 右侧分类列表 数据, 用搜索接口 关键字为空 默认搜索全部
+     * @param kw 字符串 关键字
+     * @returns {Promise.<void>}
+     */
+    async getTypeBigListData (kw) {
+      this.showDetail = false
+      this.typeDetail = '' // 清空
+      this.typeSummary = ''
+      const EntId = process.env.VUE_APP_TEST_ENTID
+      const OrgId = process.env.VUE_APP_TEST_ORGID
+      const PartId = this.tabData[this.activeTab]['partId']
+      const url = `/PartContent/Search?EntId=${EntId}&OrgId=${OrgId}&PartId=${PartId}`
+      const data = {
+        CT_KEY_WORDS: ''
+      }
+      const result = await http.post(url, data)
       console.log(result)
-      this.resData = result.Data
-
+      if (!result.Data.length) {
+        console.log('result 为空')
+        return
+      }
+      for (let obj of result.Data) {
+        this.typeBigList.push({
+          name: obj.ReferenceValues.CM03_PART_ID,
+          orderNo: obj.CM01_VIEW_ORDER,
+          partId: obj.CM03_PART_ID,
+          summary: obj.CM03_SUMMARY
+        })
+      }
+      this.typeBigList = _.sortBy(this.typeBigList, 'orderNo')
+    },
+    /**
+     * 点击分类li 请求分类详情数据
+     * @param partId 栏目id
+     * @param desc 分类简单描述
+     */
+    clickType (partId) {
+      this.getTypeDetailData(partId)
+      this.showDetail = true
+    },
+    /**
+     * 点击搜索
+     * @param formdata 搜索数据对象
+     */
+    clickSearch (formdata) {
+      this.doSearch(formdata)
     }
   },
   
   created () {
-    this.getInfo()
 
   },
 
@@ -312,10 +474,11 @@ export default {
     li {
       width: 100%;
       border-bottom: 1px dashed rgba(209,211,212,1);
-      display: flex;
-      align-items: center;
+      /*display: flex;*/
+      /*align-items: center;*/
       padding: 12px 0;
       cursor: pointer;
+      overflow: hidden;
     }
     li:hover {
       color: $activeColor;
@@ -326,6 +489,11 @@ export default {
     .li-label {
       color: #131313;
       margin-right: 5px;
+      white-space: nowrap;
+      float: left;
+    }
+    .li-ct {
+      float: left;
     }
   }
   .type-detail-main {

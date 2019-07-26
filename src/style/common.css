@@ -46,3 +46,6 @@
     border-color: #BE2027;
     background: #BE2027;
 }
+.el-breadcrumb__inner {
+    cursor: pointer!important;
+}

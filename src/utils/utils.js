@@ -202,15 +202,15 @@ export default {
    * @param dateStr /Date(157737600000)/
    * @param hm 是否需要小时分钟
    */
-  handleTime: function (dateStr, hm = false) {
-    // console.log(dateStr)
-    let theResult = this.formatDate(dateStr)
-    if (!theResult) {
-      return theResult
-    }
-    theResult = this.formatTime(theResult, hm)
-    return theResult
-  },
+  // handleTime: function (dateStr, hm = false) {
+  //   // console.log(dateStr)
+  //   let theResult = this.formatDate(dateStr)
+  //   if (!theResult) {
+  //     return theResult
+  //   }
+  //   theResult = this.formatTime(theResult, hm)
+  //   return theResult
+  // },
   /**
    * 判断是空对象
    * @param obj 对象
@@ -649,4 +649,11 @@ export default {
       el.scrollTop -= step;
     }, 20);
   },
+  /**
+   * 处理时间
+   * @param timeStr 时间字符串
+   */
+  handleTime (timeStr) {
+    return timeStr.split('T')[0]
+  }
 }

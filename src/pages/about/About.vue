@@ -102,51 +102,25 @@
             <li>学历要求</li>
             <li>发布时间</li>
           </ul>
-          <div class="tab4-comp">
-            <div class="tab4-comp-l" @click="clickBtn(0)">
-              <img src="./assets/icon_guanbi.png" alt="" v-if="activeComp===0">
+          <div class="tab4-comp" v-if="recruitData.length" v-for="(item,index) in recruitData" :key="index">
+            <div class="tab4-comp-l" @click="clickBtn(index)">
+              <img src="./assets/icon_guanbi.png" alt="" v-if="activeComp===index">
               <img src="./assets/icon_dakai.png" alt="" v-else>
             </div>
             <div class="tab4-comp-r">
-              <ul :class="['tab4-comp-r-header', {'comp-color': activeComp===0}]">
-                <li>专利工程师（合伙人）</li>
-                <li>若干人</li>
-                <li>专科以上学历</li>
-                <li>2019.6.15</li>
+              <ul :class="['tab4-comp-r-header', {'comp-color': activeComp===index}]">
+                <li>{{item.position}}</li>
+                <li>{{item.num}}</li>
+                <li>{{item.education}}</li>
+                <li>{{item.time}}</li>
               </ul>
-              <div class="tab4-comp-r-body" v-if="activeComp===0">
-                <div class="tab4-comp-r-body-inner">
-
+              <div class="tab4-comp-r-body" v-if="activeComp===index">
+                <div class="tab4-comp-r-body-inner" v-html="item.detail">
+                  <!--具体要求-->
                 </div>
               </div>
             </div>
           </div>
-          <!--<div class="tab4-comp">-->
-            <!--<div class="tab4-comp-l" @click="clickBtn(1)">-->
-              <!--<img src="./assets/icon_guanbi.png" alt="" v-if="activeComp===1">-->
-              <!--<img src="./assets/icon_dakai.png" alt="" v-else>-->
-            <!--</div>-->
-            <!--<div class="tab4-comp-r">-->
-              <!--<ul :class="['tab4-comp-r-header', {'comp-color': activeComp===1}]">-->
-                <!--<li>专利工程师（合伙人）</li>-->
-                <!--<li>若干人</li>-->
-                <!--<li>专科以上学历</li>-->
-                <!--<li>2019.6.15</li>-->
-              <!--</ul>-->
-              <!--<div class="tab4-comp-r-body"  v-if="activeComp===1">-->
-                <!--<div class="tab4-comp-r-body-inner">-->
-
-                  <!--1、完成公司业绩目标要求的工作；-->
-                  <!--2、挖掘业务需要的潜在客户并促成订单；-->
-                  <!--3、在部门经理领导下，负责商标、专利、版权、科技项目案源开拓和知识产权市场营销；-->
-                  <!--4、开发新客户，完成并跟进客户委托的案件，进行客户管理和档案管理；-->
-                  <!--5、办理自己开发客户的商标、专利、版权、诉讼案件，并做好跟踪回访工作；-->
-
-                <!--</div>-->
-              <!--</div>-->
-            <!--</div>-->
-          <!--</div>-->
-
         </div>
       </div>
     </div>
@@ -174,7 +148,7 @@ export default {
         {img: require('./assets/banner.png')},
         {img: require('./assets/banner2.png')},
       ],
-      activeItem: 'L2',
+      activeItem: 'L2', // 栏目code
       resData: null, // 请求的数据
       activeTab: 0, // 当前tab
       activeComp: 0, // 诚聘英才 激活的id
@@ -200,7 +174,7 @@ export default {
         '<p>研究并建立知识产权信息系统，包括知识产权检索、知识产权统计分析与预警、知识产权评估与交易、管理共享和延伸服务五大应用功能，提供全面的知识产权信息服务。</p>'},
 
       ],
-      recruitData: null // 招聘数据
+      recruitData: [] // 招聘数据
     }
   },
 
@@ -224,22 +198,8 @@ export default {
     changeTab (idx) {
       this.activeTab = idx
       if (this.activeTab === 3) { // 招聘人才
-        if (!this.recruitData) {
+        if (!this.recruitData.length) {
           this.getRecruitData()
-        }
-      }
-    },
-    async getInfo () {
-      const EntId = process.env.VUE_APP_TEST_ENTID
-      const OrgId = process.env.VUE_APP_TEST_ORGID
-      const url = `/PartBase/Search?EntId=${EntId}&OrgId=${OrgId}`
-      const result = await http.post(url, {})
-      console.log(result)
-      this.resData = result.Data
-      for (let obj of this.resData) {
-        if (obj.CM01_PART_CODE === this.activeItem) { // 找到自己的栏目id,父栏目id
-          this.partId = obj.CM01_PART_ID
-          this.parentId = obj.CM01_PARENT_ID
         }
       }
     },
@@ -250,7 +210,7 @@ export default {
     handleHeader (data) {
       this.resData = data
       for (let obj of this.resData) {
-        if (obj.CM01_PART_CODE === this.activeItem) { // 找到自己的栏目id,父栏目id
+        if (obj.CM01_PART_CODE === this.activeItem) { // 根据栏目code, 找到自己的栏目id,父栏目id
           this.partId = obj.CM01_PART_ID
           this.parentId = obj.CM01_PARENT_ID
         }
@@ -258,7 +218,7 @@ export default {
       this.getTabData()
     },
     /**
-     * 获取tab切换的数据
+     * 获取tab切换(子栏目)的数据
      */
     async getTabData () {
       const EntId = process.env.VUE_APP_TEST_ENTID
@@ -291,7 +251,24 @@ export default {
         console.log('result 为空')
         return
       }
-
+      this.handleRecruitData(result.Data)
+    },
+    /**
+     * 处理招聘数据
+     * @param data 数组 招聘数据
+     */
+    handleRecruitData (data) {
+      let arr = []
+      for (let obj of data) {
+        arr.push({
+          position: obj.RE13_NAME,
+          num: obj.RE13_PERSONS,
+          education: obj.RE13_EDU_DEGREE,
+          time: obj.RE13_CHG_TIME.split('T')[0],
+          detail: obj.RE13_DESC
+        })
+      }
+      this.recruitData = arr
     }
   },
   
@@ -486,6 +463,9 @@ export default {
       /*font-size: 14px!important;*/
       font-family:MicrosoftYaHei;
       line-height:32px;
+    }
+    ::v-deep img {
+      max-width: 100%;
     }
   }
   .comp-color {
