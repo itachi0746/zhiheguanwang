@@ -499,7 +499,7 @@ export default {
       newsData2: [], // 近期新闻 储存
       showNews: false, // 是否显示新闻详情
       newsDetail: '', // 新闻详情
-      numPerPage: 2, // 每页显示条数
+      numPerPage: 8, // 每页显示条数
       showNewsArr: [], // 新闻数组 展示
       curPage: 1, // 当前页(行业新闻)
       curPage2: 1, // 当前页(近期新闻)

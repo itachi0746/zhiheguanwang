@@ -1,7 +1,7 @@
 <template>
   <div>
     <Header :activeItem="activeItem" @initHeader="handleHeader"/>
-    <Lunbo v-if="lunboArr" :imgArr="lunboArr" />
+    <Lunbo v-if="lunboArr" :imgArr="lunboArr"/>
 
     <div class="index">
       <!--服务范围-->
@@ -160,7 +160,11 @@ export default {
         {'name-c': '版权服务', 'name-e': 'COPYRIGHT SERVICES', 'img': require('./assets/banquan.png')},
         {'name-c': '科技项目申请', 'name-e': 'TECHNOLOGY PROJECT APPLICATION', 'img': require('./assets/kejixiangmu.png')},
         {'name-c': '质押融资', 'name-e': 'PLEDGE FINANCING', 'img': require('./assets/zhiyarongzi.png')},
-        {'name-c': '知识产权法律诉讼', 'name-e': 'INTELLECTUAL PROPERTY LITIGATION', 'img': require('./assets/zhishichanquan.png')},
+        {
+          'name-c': '知识产权法律诉讼',
+          'name-e': 'INTELLECTUAL PROPERTY LITIGATION',
+          'img': require('./assets/zhishichanquan.png')
+        },
         {'name-c': '商标专利买卖', 'name-e': 'TRADEMARK PATENT TRADING', 'img': require('./assets/shangbiaozhaunli.png')},
         {'name-c': '企业品牌策划', 'name-e': 'ENTERPRISE BRAND PLANNING', 'img': require('./assets/qiyepingpai.png')},
       ],
@@ -185,11 +189,31 @@ export default {
         {content1: '行业地位提升', content2: '100倍', img: require('./assets/hangyediwei.png')},
       ],
       part4List: [
-        {title: '丰富的知识产权顾问经验', content: '我院从事过数十家企业的知识产权顾问工作，积累了丰富的知识产权顾问经验。同时，也从事过百余件知识产权培训、专利挖掘、专利布局、专利信息分析、海外预警、知识产权战略、知识产权评议、商标布局等工作内容。', cls: 'p4-li-img1'},
-        {title: '形成了完善的知识产权顾问工作方案', content: '我院自第一家知识产权顾问开始，就在尝试构建知识产权顾问方案。通过不断的经验积累，客户沟通反馈，已经建立了完善的工作方案，工作流程，保证公司的知识产权顾问效果。', cls: 'p4-li-img2'},
-        {title: '强大的知识产权顾问专业队伍', content: '我院从事过数十家企业的知识产权顾问工作，积累了丰富的知识产权顾问经验。同时，也从事过百余件知识产权培训、专利挖掘、专利布局、专利信息分析、海外预警、知识产权战略、知识产权评议、商标布局等工作内容。', cls: 'p4-li-img3'},
-        {title: '知识产权管理经验丰富', content: '我院自第一家知识产权顾问开始，就在尝试构建知识产权顾问方案。通过不断的经验积累，客户沟通反馈，已经建立了完善的工作方案，工作流程，保证公司的知识产权顾问效果。', cls: 'p4-li-img4'},
-        {title: '可量化的知识产权顾问目标', content: '我院在知识产权顾问服务中，均会根据企业的基本情况，竞争情况等，和企业一道制定可量化的知识产权目标，比如专利申请量、专利授权率、知产培训量、专利布局数等等。通过可量化的目标一方面可以对顾问内容进行效果检验，另一方面可以提升公司的知识产权实质效果。', cls: 'p4-li-img5'},
+        {
+          title: '丰富的知识产权顾问经验',
+          content: '我院从事过数十家企业的知识产权顾问工作，积累了丰富的知识产权顾问经验。同时，也从事过百余件知识产权培训、专利挖掘、专利布局、专利信息分析、海外预警、知识产权战略、知识产权评议、商标布局等工作内容。',
+          cls: 'p4-li-img1'
+        },
+        {
+          title: '形成了完善的知识产权顾问工作方案',
+          content: '我院自第一家知识产权顾问开始，就在尝试构建知识产权顾问方案。通过不断的经验积累，客户沟通反馈，已经建立了完善的工作方案，工作流程，保证公司的知识产权顾问效果。',
+          cls: 'p4-li-img2'
+        },
+        {
+          title: '强大的知识产权顾问专业队伍',
+          content: '我院从事过数十家企业的知识产权顾问工作，积累了丰富的知识产权顾问经验。同时，也从事过百余件知识产权培训、专利挖掘、专利布局、专利信息分析、海外预警、知识产权战略、知识产权评议、商标布局等工作内容。',
+          cls: 'p4-li-img3'
+        },
+        {
+          title: '知识产权管理经验丰富',
+          content: '我院自第一家知识产权顾问开始，就在尝试构建知识产权顾问方案。通过不断的经验积累，客户沟通反馈，已经建立了完善的工作方案，工作流程，保证公司的知识产权顾问效果。',
+          cls: 'p4-li-img4'
+        },
+        {
+          title: '可量化的知识产权顾问目标',
+          content: '我院在知识产权顾问服务中，均会根据企业的基本情况，竞争情况等，和企业一道制定可量化的知识产权目标，比如专利申请量、专利授权率、知产培训量、专利布局数等等。通过可量化的目标一方面可以对顾问内容进行效果检验，另一方面可以提升公司的知识产权实质效果。',
+          cls: 'p4-li-img5'
+        },
       ]
     }
   },
@@ -219,6 +243,7 @@ export default {
         }
       }
     },
+
     /**
      * 处理头部传来的数据
      * @param data 传来的数据 数组
@@ -231,7 +256,7 @@ export default {
           this.parentId = obj.CM01_PARENT_ID
         }
       }
-//      this.getTabData()
+      //      this.getTabData()
     },
     /**
      * 获取tab切换的数据
@@ -245,7 +270,7 @@ export default {
       console.log(result)
     }
   },
-  
+
   created () {
   },
 
@@ -261,19 +286,23 @@ export default {
     margin: 0 auto;
     width: 1200px;
   }
+
   .part-box {
     padding-top: 50px;
   }
+
   .the-title {
     color: #E6E6E6;
     font-size: 36px;
     text-align: center;
     line-height: 0.9;
   }
+
   .the-title div:nth-child(2) {
     font-size: 44px;
     font-weight: bold;
   }
+
   .p-name {
     font-size: 26px;
     color: #131313;
@@ -281,6 +310,7 @@ export default {
     margin-bottom: 13px;
     text-align: center;
   }
+
   .the-line {
     text-align: center;
     font-size: 0;
@@ -293,6 +323,7 @@ export default {
       display: inline-block;
     }
   }
+
   .part1-list {
     display: flex;
     justify-content: space-between;
@@ -300,14 +331,15 @@ export default {
     color: #131313;
     text-align: center;
     li {
-      width:252px;
-      height:294px;
-      border: 1px solid rgba(216,216,216,1);
+      width: 252px;
+      height: 294px;
+      border: 1px solid rgba(216, 216, 216, 1);
       margin-top: 50px;
       @include borderBox();
       padding-top: 52px;
     }
   }
+
   .part2-list {
     display: flex;
     /*justify-content: space-between;*/
@@ -331,6 +363,7 @@ export default {
       text-align: center;
     }
   }
+
   .part3-list {
     display: flex;
     justify-content: space-between;
@@ -345,9 +378,11 @@ export default {
       margin-bottom: 63px;
     }
   }
+
   .part4-list2 {
     margin-bottom: 50px;
   }
+
   .part4-list, .part4-list2 {
     margin-top: 50px;
     display: flex;
@@ -361,12 +396,15 @@ export default {
       /*height: 452px;*/
     }
   }
+
   .part4-list li:nth-child(1) {
     margin-left: 208px;
   }
+
   .part4-list li:nth-child(2) {
     margin-right: 208px;
   }
+
   .part5-list {
     margin-top: 50px;
     display: flex;
@@ -387,27 +425,34 @@ export default {
     height: 240px;
     background-color: #EFEFEF;
   }
+
   .p4-li-img {
     width: 367px;
     height: 240px;
     background-size: 100% 100%;
     background-repeat: no-repeat;
   }
+
   .p4-li-img1 {
     background-image: url("./assets/youshi__jianyan.png");
   }
+
   .p4-li-img2 {
     background-image: url("./assets/youshi_fangan.png");
   }
+
   .p4-li-img3 {
     background-image: url("./assets/yushi_duiwu.png");
   }
+
   .p4-li-img4 {
     background-image: url("./assets/youshi_guanli.png");
   }
+
   .p4-li-img5 {
     background-image: url("./assets/youshi_mubiao.png");
   }
+
   .p4-li-title {
     font-size: 18px;
     color: $activeColor;
@@ -415,37 +460,44 @@ export default {
     line-height: 53px;
     padding-left: 16px;
   }
+
   .p4-li-line {
     width: 100%;
     height: 2px;
     display: flex;
   }
+
   .p4-li-main {
     padding: 14px 16px;
     line-height: 25px;
   }
+
   .p4-li-line-l {
     width: 215px;
     height: 2px;
     background-color: #D5D5D5;
   }
+
   .p4-li-line-r {
     width: 152px;
     height: 2px;
     background-color: #ffffff;
   }
+
   .li-no {
     font-weight: bold;
     width: 73px;
     height: 73px;
     line-height: 73px;
   }
+
   .li-font {
     width: 358px;
     height: 73px;
     line-height: 73px;
 
   }
+
   .li-img {
     width: 100px;
     height: 100px;
@@ -453,16 +505,20 @@ export default {
     background-size: 100% 100%;
 
   }
+
   .li-name-c {
     font-size: 20px;
   }
+
   .li-name-e {
     font-size: 12px;
   }
+
   .white-li {
-    color: #131313!important;
-    background-image: url("./assets/tongdian_ditu.png")!important;
+    color: #131313 !important;
+    background-image: url("./assets/tongdian_ditu.png") !important;
   }
+
   .mid-img {
     width: 1200px;
     height: 368px;
@@ -471,6 +527,7 @@ export default {
     margin-top: 25px;
     margin-bottom: 50px;
   }
+
   .part3-libox {
     width: 140px;
     height: 140px;
@@ -481,10 +538,12 @@ export default {
     /*background-image: url("./assets/yanfacb.png");*/
     margin: 0 auto;
   }
+
   .part3-li-num {
     font-weight: bold;
     color: #FF9C00;
   }
+
   .Effect-box {
     width: 544px;
     height: 346px;
@@ -493,61 +552,73 @@ export default {
     position: relative;
     margin: 0 auto;
   }
+
   .e-line {
     position: absolute;
     color: #333;
     font-size: 16px;
   }
+
   .e-r-line1 {
     top: 11px;
     left: 466px;
     width: 410px;
   }
+
   .e-l-line1 {
     top: 11px;
     right: 466px;
     width: 410px;
   }
+
   .e-r-line2 {
     top: 80px;
     left: 538px;
     width: 250px;
   }
+
   .e-l-line2 {
     top: 80px;
     right: 538px;
     width: 250px;
   }
+
   .e-r-line3 {
     left: 558px;
     top: 160px;
     width: 220px;
   }
+
   .e-l-line3 {
     right: 558px;
     top: 160px;
     width: 220px;
   }
+
   .e-r-line4 {
     width: 135px;
     top: 247px;
     left: 534px;
   }
+
   .e-l-line4 {
     width: 175px;
     top: 247px;
     right: 534px;
   }
+
   .e-r-line5 {
     width: 140px;
     left: 464px;
     top: 318px;
   }
+
   .e-l-line5 {
     width: 180px;
     right: 464px;
     top: 318px;
   }
+
   .mid-font {
     color: #ffffff;
     font-size: 30px;

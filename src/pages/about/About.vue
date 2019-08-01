@@ -323,6 +323,9 @@ export default {
   .main-item {
     width: 570px;
     height: 486px;
+    img {
+      width: 570px;
+    }
   }
   .the-title {
     font-size: 18px;

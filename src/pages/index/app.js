@@ -4,10 +4,12 @@ import '@/utils/rem.js'
 import '@/style/reset.scss'
 import '@/style/common.css'
 import { Button, Carousel, CarouselItem } from 'element-ui'
+
 Vue.use(Button)
 Vue.use(Carousel)
 Vue.use(CarouselItem)
 new Vue({
   el: '#app',
+  ael: 'aaa',
   render: h => h(App)
 })
