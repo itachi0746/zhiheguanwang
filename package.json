@@ -55,5 +55,22 @@
     "vue-eslint-parser": "^3.2.2",
     "vue-template-compiler": "^2.5.17",
     "webpack-bundle-analyzer": "^2.13.1"
+  },
+  "postcss": {
+    "plugins": {
+      "autoprefixer": {},
+      "postcss-pxtorem": {
+        "rootValue": 40,
+        "propList": [
+          "*"
+        ],
+        "selectorBlackList": [
+          "van-",
+          "el-"
+        ],
+        "minPixelValue": 12,
+        "replace": true
+      }
+    }
   }
 }

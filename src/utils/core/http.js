@@ -25,6 +25,7 @@ axios.interceptors.request.use(function (config) {
 // 响应拦截
 axios.interceptors.response.use(function (response) {
     // Do something with response data
+    console.log(response)
     return response;
 }, function (error) {
     // Do something with response error

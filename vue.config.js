@@ -33,17 +33,19 @@ module.exports = {
   publicPath: './', // 相当于baseUrl
   productionSourceMap: !(process.env.NODE_ENV === 'production'),
   css: {
-    loaderOptions: {
-      postcss: { // px转换rem
-        plugins: [
-          require('postcss-pxtorem')({
-            rootValue : 40, // 换算的基数,根元素大小px, 要以设计图尺寸大小标准下的网页为准,例如设计图是750px宽度, 则以750px宽度的网页里的html的fontsize为准
-            selectorBlackList  : ['van','el-'], // 忽略转换正则匹配项
-            propList   : ['*'], // *表示通用,所有属性都转为rem
-          }),
-        ]
-      }
-    }
+    // loaderOptions: {
+    //   postcss: { // px转换rem
+    //     plugins: [
+    //       require('postcss-pxtorem')({
+    //         rootValue : 40, // 换算的基数,根元素大小px, 要以设计图尺寸大小标准下的网页为准,例如设计图是750px宽度, 则以750px宽度的网页里的html的fontsize为准
+    //         selectorBlackList  : ['van','el-'], // 忽略转换正则匹配项
+    //         propList   : ['*'], // *表示通用,所有属性都转为rem
+    //       }),
+    //     ],
+    //       browsers: ['last 2 versions', 'ie >= 10']
+    //
+    //   }
+    // }
   },
   devServer: {
     port: 83,
