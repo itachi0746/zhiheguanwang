@@ -119,7 +119,7 @@ export default {
     li {
       float: left;
       height: 42px;
-      width: 73px;
+      min-width: 73px;
       text-align: center;
       line-height: 42px;
       border-bottom: 2px solid transparent;
